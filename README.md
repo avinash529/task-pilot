@@ -2,6 +2,17 @@
 
 A production-oriented Laravel task management system built with clean architecture, repository pattern, AI-assisted summaries, dashboard analytics, Blade + Tailwind UI, and session authentication.
 
+## Submission Checklist
+
+- Git repository link: <https://github.com/avinash529/task-pilot>
+- README (Architecture + AI explanation): see the **Architecture + AI Explanation** section below.
+- Screenshots:
+  - `docs/screenshots/01-login.png`
+  - `docs/screenshots/02-dashboard.png`
+  - `docs/screenshots/03-tasks-list.png`
+  - `docs/screenshots/04-task-details.png`
+- `.env.example`: included at the project root (`.env.example`).
+
 ## Stack
 
 - Laravel 12 (compatible with Laravel 10+ requirement)
@@ -12,7 +23,7 @@ A production-oriented Laravel task management system built with clean architectu
 - Queue-ready AI summary pipeline
 - Repository pattern with service layer and policies
 
-## Architecture
+## Architecture + AI Explanation
 
 Controllers do not talk to Eloquent directly. The request flow is:
 
@@ -23,6 +34,33 @@ AI flow:
 `TaskService -> AIService -> AIClientInterface -> OpenAI-compatible client`
 
 If AI credentials are missing or `AI_FORCE_MOCK=true`, the app falls back to a deterministic mock summary and predicted priority.
+
+## Auto-Reject Rule Coverage
+
+- No repository layer:
+  - Implemented with `TaskRepositoryInterface` + `TaskRepository` and `UserRepositoryInterface` + `UserRepository`.
+- Direct model usage in controller:
+  - Controllers delegate reads/writes to `TaskService`, which delegates persistence to repositories.
+- No AI integration:
+  - Implemented with `AIService`, `AIClientInterface`, and `OpenAIClient` via `TaskService`.
+- No policies:
+  - Implemented with `TaskPolicy` and `UserPolicy`, registered via `Gate::policy(...)`.
+- Poor folder structure:
+  - Layered structure is organized by responsibility (`Http`, `Services`, `Repositories`, `Policies`, `Jobs`, `Models`, `Requests`, `Resources`).
+
+## Screenshots
+
+### Login
+![Login](docs/screenshots/01-login.png)
+
+### Dashboard
+![Dashboard](docs/screenshots/02-dashboard.png)
+
+### Tasks List
+![Tasks List](docs/screenshots/03-tasks-list.png)
+
+### Task Details
+![Task Details](docs/screenshots/04-task-details.png)
 
 ## Folder Structure
 
